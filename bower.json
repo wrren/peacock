@@ -1,0 +1,27 @@
+{
+  "name": "peacock",
+  "version": "0.1.0",
+  "authors": [
+    "Warren Kenny <warren.kenny@gmail.com>"
+  ],
+  "description": "Front-end for sqerl and pheasant trade processing back-ends",
+  "main": "public/index.html",
+  "keywords": [
+    "websocket"
+  ],
+  "license": "MIT",
+  "homepage": "wrren.me",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/app/components/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.4",
+    "ammap": "~3.10.0"
+  }
+}
