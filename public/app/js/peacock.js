@@ -47,6 +47,9 @@ function init( div, connection ) {
 			}
 		}
 
+		globe.createPoints();
+		globe.animate();
+		
 		console.log( globe );
 	}
 }
