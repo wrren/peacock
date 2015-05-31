@@ -22,6 +22,8 @@
   "dependencies": {
     "jquery": "~2.1.4",
     "bootstrap": "~3.3.4",
-    "ammap": "~3.10.0"
+    "ammap": "~3.10.0",
+    "threejs": "*",
+    "tweenjs": "*"
   }
 }

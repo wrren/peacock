@@ -1,1 +1,1 @@
-var config = { server: "" };
+var config = { server: "", max_feed_items: 30 };

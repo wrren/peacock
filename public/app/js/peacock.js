@@ -1,76 +1,56 @@
-function init_map( div ) {
-	return AmCharts.makeChart( 	div, 
-					{
-	  					type: "map",
-	  					"theme": "none",
-	  					path: "http://www.amcharts.com/lib/3/",
-
-	  					"zoomControl": {
-							"zoomControlEnabled": false
-						},
-
-						colorSteps: 100,
-
-						dataProvider: 
-						{
-							map: "worldLow",
-							areas: []
-						},
-
-						dragMap: false,
-
-						areasSettings: 
-						{
-							autoZoom: true
-						},
-
-						valueLegend: 
-						{
-							right: 10,
-							minValue: "Low Trade Activity",
-							maxValue: "High Trade Activity"
-						},
-
-						"export": 
-						{
-							"enabled": true
-						}
-					} );
-}
-
-function update_trades( trades, location, sold ) {
-	var found = false;
-
-	var result = $.map( trades, function( element, index ) {
-		if( element.id == location ) {
-			found = true;
-			return { id: location, value: element.value + sold };
-		}
-		return { id: element.id, value: element.value - element.value / 10 };
-	} );
-
-	if( !found ) {
-		result.push( { id: location, value: sold } );
+function add_feed_item( trade ) {
+	while( $( '#feed' ).children().length >= config.max_feed_items ) {
+		$( '#feed p:last-child' ).remove();
 	}
 
-	console.log( result );
+	$( '#feed' ).prepend( '<p>' + trade.from_amount +  ' ' + trade.from_currency + ' -> ' + trade.to_amount + ' ' + trade.to_currency + '</p>' );
+}
 
-	return result;
+function init( div, connection ) {
+	if( !Detector.webgl ) {
+		Detector.addGetWebGLMessage();
+	} 
+	else {
+		var container 	= document.getElementById( div );
+		var globe 	= new DAT.Globe( container, { imgDir: "app/js/webgl-globe/" } );
+		var max 	= 0;
+
+		var position	= function( lat, lon, value ) {
+			return [ 	lat + ( Math.random() > 0.5 ? -Math.random() : Math.random() ),
+					lon + ( Math.random() > 0.5 ? -Math.random() : Math.random() ),
+					value ];
+		};
+
+		connection.onmessage = function( e ) {
+			var trade = $.parseJSON( e.data );
+
+			var matches = $.map( locations, function( elem, i ) {
+				if( elem.code == trade.origin ) {
+					return i;
+				}
+			} );
+
+			if( matches.length == 1 ) {
+				var l = locations[matches[0]];
+				l.value += trade.from_amount;
+				locations[matches[0]] = l;
+
+				if( l.value > max ) {
+					max = l.value;
+				}
+				
+				globe.addData( position( l.latitude, l.longitude, l.value / max ), { format: 'magnitude' } );
+				globe.createPoints();
+				globe.animate();
+
+				add_feed_item( trade );
+			}
+		}
+
+		console.log( globe );
+	}
 }
 
 $( document ).ready( function() {
-	var map 		= init_map( "map" );
-	var trades 		= [];
-	map.pathToImages 	= "app/components/ammap/dist/ammap/images/";
-	var connection 		= new WebSocket( config.server );
-
-	connection.onmessage = function( e )
-	{
-		var trade = $.parseJSON( e.data );
-		trades =  update_trades( trades, trade.origin, trade.from_amount );
-		map.dataProvider = {	map: "worldLow",
-					areas: trades
-		},
-		map.validateData();
-	};
+	init( "map", new WebSocket( config.server ) );
 } );

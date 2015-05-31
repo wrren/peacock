@@ -5,23 +5,27 @@
 		<script type="text/javascript" src="app/components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="app/components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-		<!-- Include the AMMAP plugin to display the heat map -->
-		<script src="app/components/ammap/dist/ammap/ammap.js"></script>
-		<script src="app/components/ammap/dist/ammap/maps/js/worldLow.js"></script>
-		<script src="app/components/ammap/dist/ammap/themes/none.js"></script>
+		<!-- Include the WebGL-Globe plugin to display the magnitude map -->
+		<script src="app/components/threejs/build/three.min.js"></script>
+		<script src="app/components/tweenjs/build/tween.min.js"></script>
+		<script src="app/js/webgl-globe/third-party/Detector.js"></script>
+		<script src="app/js/webgl-globe/globe.js"></script>
 
 		<script type="text/javascript" src="app/js/config.js"></script>
+		<script type="text/javascript" src="app/js/latlon.js"></script>
 		<script type="text/javascript" src="app/js/peacock.js"></script>
 				
 		<link rel="stylesheet" type="text/css" href="app/components/bootstrap/dist/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="app/components/ammap/dist/ammap/ammap.css" />
-
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" type="text/css" href="app/css/peacock.css" />
 	</head>
 	<body>
 		<div class="container-fluid">
 			<div class="row">
-				<div id="map" class="col-xs-12" />
+				<div class="col-xs-10">
+					<div id="map"></div>
+				</div>
+				<div id="feed" class="col-xs-2"></div>
 			</div>
 		</div>
 	</body>
